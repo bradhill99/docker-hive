@@ -42,10 +42,23 @@ services:
   hive-metastore-postgresql:
     image: bde2020/hive-metastore-postgresql:2.3.0
   presto-coordinator:
-    image: shawnzhu/prestodb:0.181
+    image: prestodb:20190722001
     ports:
       - "8080:8080"
-
+    volumes:
+      - /Users/bradliu/git/docker-prestodb:/tmp/host
+  postgres-server:
+    image: coheigea/ranger-postgres
+    environment:
+      - POSTGRES_PASSWORD=security
+    ports:
+      - "5433:5432"
+  ranger-admin:
+    image: coheigea/ranger-admin:20190702001
+    depends_on:
+      - "postgres-server"
+    ports:
+      - "6080:6080"
 volumes:
   namenode:
   datanode:
